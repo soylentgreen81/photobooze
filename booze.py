@@ -11,7 +11,7 @@ from flask import (
 import gphoto2 as gp
 
 
-booze = Flask(__name__)
+booze = Flask(__name__, static_folder="static", template_folder="templates")
 
 def preview_stream():
     # init gphoto2 here
