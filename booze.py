@@ -31,7 +31,7 @@ def index():
 def getPictures():
     data = [ 
             {'pictureurl': '/pictures/'+p} 
-            for p in listdir(imagedir)
+            for p in listdir(imagedir) if not p.endswith("thumb.jpg")
     ]
     return jsonify(data)
     
