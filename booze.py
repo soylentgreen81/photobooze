@@ -19,6 +19,7 @@ booze = Flask(__name__, static_folder="static", template_folder="templates")
 
 imagedir = "/home/alarm/images/"
 
+cam = gp.Camera(lazy=True)
 cameraSemaphore = threading.Semaphore(1)
 
 
@@ -54,7 +55,6 @@ def getPicture(filename):
 @booze.route("/pictures", methods=["POST"])
 def postPicture():
     with cameraSemaphore: 
-        cam = gp.Camera()
         image_data = cam.capture(to_camera_storage = True)
         image_data.save(join(imagedir,image_data.name))
         return jsonify({'pictureurl':'/pictures/' + image_data.name})
