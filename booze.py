@@ -13,13 +13,11 @@ import gphoto2 as gp
 from os import listdir
 from os.path import join
 
-import threading
+from filelock import Timeout, FileLock
 
 booze = Flask(__name__, static_folder="static", template_folder="templates")
 
 imagedir = "/home/alarm/images/"
-
-cameraSemaphore = threading.Semaphore(1)
 
 
 @booze.route("/", methods = ["GET"])
@@ -44,7 +42,8 @@ def getPicture(filename):
 
 @booze.route("/pictures", methods=["POST"])
 def postPicture():
-    with cameraSemaphore: 
+    cameraLock = FileLock("camera.lock", timeout=15)
+    with cameraLock: 
         camera = gp.check_result(gp.gp_camera_new())
         gp.check_result(gp.gp_camera_init(camera))
         config = gp.check_result(gp.gp_camera_get_config(camera))
