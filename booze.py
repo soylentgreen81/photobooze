@@ -51,13 +51,9 @@ def getPicture(filename):
 @booze.route("/pictures", methods=["POST"])
 def postPicture():
     cam = gp.Camera()
-    image_data = cam.capture(to_camera_storage = False)
-    # to_camera_storage = True gibt nen "File-Object"???
-    # sonst bytes
-    filename = image_data.name # Blind dem Quelltext von gphoto2-cffi entnommen
-    with open(join(imagedir, filename), 'wb') as f:
-        f.write(image_data.get_data()) # Blind dem Quelltext von gphoto2-cffi entnommen
-    return jsonify({'pictureurl':'/pictures/' + filename})
+    image_data = cam.capture(to_camera_storage = True)
+    image_data.save()
+    return jsonify({'pictureurl':'/pictures/' + image_data.name})
 
 if __name__ == "__main__":
     booze.run (  host="0.0.0.0", port = "8000", debug = "True" )
