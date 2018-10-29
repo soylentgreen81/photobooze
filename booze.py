@@ -10,7 +10,8 @@ from flask import (
         )
 
 import gphoto2 as gp
-import os
+from os import listdir
+from os.path import join
 
 import threading
 
@@ -38,15 +39,15 @@ def preview():
 
 @booze.route("/pictures", methods = ["GET"])
 def getPictures():
-    data = []
-    for root, dirs, files in os.walk(imagedir):
-        for filename in files:
-            data.append({'pictureurl':'/pictures/' + filename})
+    data = [ 
+            {'pictureurl': '/pictures/'+p} 
+            for p in listdir(imagedir)
+    ]
     return jsonify(data)
     
 @booze.route("/pictures/<filename>")
 def getPicture(filename):
-    image = os.path.join(imagedir, filename)
+    image = join(imagedir, filename)
     return send_file(image, mimetype="image/jpeg")
 
 @booze.route("/pictures", methods=["POST"])
@@ -57,13 +58,13 @@ def postPicture():
         print('Capturing image')
         file_path = gp.check_result(gp.gp_camera_capture(camera, gp.GP_CAPTURE_IMAGE))
         print('Camera file path: {0}/{1}'.format(file_path.folder, file_path.name))
-        target = os.path.join(imagedir, file_path.name)
+        target = join(imagedir, file_path.name)
         print('Copying image to', target)
         camera_file = gp.check_result(gp.gp_camera_file_get(camera, file_path.folder, file_path.name, gp.GP_FILE_TYPE_NORMAL))
         gp.check_result(gp.gp_file_save(camera_file, target))
         gp.check_result(gp.gp_camera_exit(camera))
         return jsonify({'pictureurl':'/pictures/' + file_path.name})
-
+        # ay ay ay :D das wirkt übertrieben kompliziert
 
 if __name__ == "__main__":
     booze.run (  host="0.0.0.0", port = "8000", debug = "True" )
