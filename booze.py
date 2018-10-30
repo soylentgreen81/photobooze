@@ -19,7 +19,6 @@ booze = Flask(__name__, static_folder="static", template_folder="templates")
 booze.config['IMAGE_DIR'] = '/home/alarm/images/'
 booze.config['THUMB_DIR'] = '/home/alarm/thumbs/'
 
-
 @booze.route("/", methods = ["GET"])
 def index():
     return render_template("index.html")
@@ -44,7 +43,7 @@ def getPicture(filename):
 @booze.route("/pictures", methods=["POST"])
 def postPicture():
     imagedir = current_app.config['IMAGE_DIR']
-	cameraLock = FileLock("camera.lock", timeout=15)
+    cameraLock = FileLock("camera.lock", timeout=15)
     with cameraLock: 
         camera = gp.check_result(gp.gp_camera_new())
         gp.check_result(gp.gp_camera_init(camera))
