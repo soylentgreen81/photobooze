@@ -16,8 +16,8 @@ from os.path import join
 from filelock import Timeout, FileLock
 
 booze = Flask(__name__, static_folder="static", template_folder="templates")
-booze.config['IMAGE_DIR'] = '/home/alarm/images/'
-booze.config['THUMB_DIR'] = '/home/alarm/thumbs/'
+booze.config['image_folder'] = '/home/alarm/images/'
+booze.config['thumb_folder'] = '/home/alarm/thumbs/'
 
 @booze.route("/", methods = ["GET"])
 def index():
@@ -26,7 +26,7 @@ def index():
 
 @booze.route("/pictures", methods = ["GET"])
 def getPictures():
-    imagedir = current_app.config['IMAGE_DIR']
+    imagedir = current_app.config['image_folder']
 	data = [ 
             {'pictureurl': '/pictures/%s' % p} 
             for p in listdir(imagedir)
@@ -35,14 +35,14 @@ def getPictures():
     
 @booze.route("/pictures/<filename>")
 def getPicture(filename):
-	image = join(current_app.config['IMAGE_DIR'], filename)
+	image = join(current_app.config['image_folder'], filename)
     return send_file(image, mimetype="image/jpeg")
 
 
 
 @booze.route("/pictures", methods=["POST"])
 def postPicture():
-    imagedir = current_app.config['IMAGE_DIR']
+    imagedir = current_app.config['image_folder']
     cameraLock = FileLock("camera.lock", timeout=15)
     with cameraLock: 
         camera = gp.check_result(gp.gp_camera_new())
