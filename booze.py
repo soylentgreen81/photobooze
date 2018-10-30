@@ -6,7 +6,8 @@ from flask import (
         render_template,
         Response,
         stream_with_context,
-        send_file
+        send_file,
+        current_app
         )
 
 import gphoto2 as gp
@@ -16,8 +17,7 @@ from os.path import join
 from filelock import Timeout, FileLock
 
 booze = Flask(__name__, static_folder="static", template_folder="templates")
-booze.config['image_folder'] = '/home/alarm/images/'
-booze.config['thumb_folder'] = '/home/alarm/thumbs/'
+booze.config.from_object('settings')
 
 @booze.route("/", methods = ["GET"])
 def index():
@@ -26,23 +26,23 @@ def index():
 
 @booze.route("/pictures", methods = ["GET"])
 def getPictures():
-    imagedir = current_app.config['image_folder']
-	data = [ 
-            {'pictureurl': '/pictures/%s' % p} 
-            for p in listdir(imagedir)
+    imagedir = current_app.config['IMAGE_FOLDER']
+    data = [ 
+        {'pictureurl': '/pictures/%s' % p} 
+        for p in listdir(imagedir)
     ]
     return jsonify(data)
     
 @booze.route("/pictures/<filename>")
 def getPicture(filename):
-	image = join(current_app.config['image_folder'], filename)
+    image = join(current_app.config['IMAGE_FOLDER'], filename)
     return send_file(image, mimetype="image/jpeg")
 
 
 
 @booze.route("/pictures", methods=["POST"])
 def postPicture():
-    imagedir = current_app.config['image_folder']
+    imagedir = current_app.config['IMAGE_FOLDER']
     cameraLock = FileLock("camera.lock", timeout=15)
     with cameraLock: 
         camera = gp.check_result(gp.gp_camera_new())
