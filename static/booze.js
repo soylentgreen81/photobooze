@@ -2,15 +2,14 @@
 document.getElementById("trigger").addEventListener("click",snap);
 
 function snap(){
+    let image = document.getElementById("image");
     console.log("Taking a picture...");
-    document.getElementById("image").src ="/static/spinner.svg";
-    fetch('/pictures',{method:"POST"})
-    .then(function(response) {
-        return response.json();
-    })
-    .then(function(data) {
-         console.log(data.pictureurl);
-         document.getElementById("image").src = data.pictureurl;
-    });
+    image.src ="/static/spinner.svg";
+    fetch('/api/v1/pictures',
+       {method:"POST"}
+    )
+      .then(response=> response.json() )
+      .then(json=> image.src = json.pictureurl)
+      .catch(error => image.src='/static/broken.png');
 
 }

@@ -7,7 +7,8 @@ from flask import (
         Response,
         stream_with_context,
         send_file,
-        current_app
+        current_app,
+        url_for
         )
 
 import gphoto2 as gp
@@ -24,23 +25,23 @@ def index():
     return render_template("index.html")
 
 
-@booze.route("/pictures", methods = ["GET"])
+@booze.route("/api/v1/pictures", methods = ["GET"])
 def getPictures():
     imagedir = current_app.config['IMAGE_FOLDER']
     data = [ 
-        {'pictureurl': '/pictures/%s' % p} 
+        {'pictureurl': url_for('getPicture',filename= p)} 
         for p in listdir(imagedir)
     ]
     return jsonify(data)
     
-@booze.route("/pictures/<filename>")
+@booze.route("/api/v1/pictures/<filename>")
 def getPicture(filename):
     image = join(current_app.config['IMAGE_FOLDER'], filename)
     return send_file(image, mimetype="image/jpeg")
 
 
 
-@booze.route("/pictures", methods=["POST"])
+@booze.route("/api/v1/pictures", methods=["POST"])
 def postPicture():
     imagedir = current_app.config['IMAGE_FOLDER']
     cameraLock = FileLock("camera.lock", timeout=15)
@@ -57,7 +58,7 @@ def postPicture():
         camera_file = gp.check_result(gp.gp_camera_file_get(camera, file_path.folder, file_path.name, gp.GP_FILE_TYPE_NORMAL))
         gp.check_result(gp.gp_file_save(camera_file, target))
         gp.check_result(gp.gp_camera_exit(camera))
-        return jsonify({'pictureurl':'/pictures/' + file_path.name})
+        return jsonify({'pictureurl': url_for('getPicture',filename=file_path.name)})
 
 if __name__ == "__main__":
     booze.run (  host="0.0.0.0", port = "8000", debug = "True" )
