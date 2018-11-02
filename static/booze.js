@@ -9,7 +9,7 @@ function snap(){
        {method:"POST"}
     )
       .then(response=> response.json() )
-      .then(json=> image.src = json.pictureurl)
+      .then(json=> image.src = json.pictureurl + '?size=scaled')
       .catch(error => image.src='/static/broken.png');
 
 }
