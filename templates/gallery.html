@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+	{% block head %}
+		<style>
+			li {
+				float: left;
+				margin: 0.5rem;
+				list-style-type: none;
+			}
+			li img {
+				width: 12rem;
+			}
+			body {
+				margin: 0;
+			}
+			#viewer {
+				position: fixed;
+				top: 0;
+				width: 100vw;
+				height: 100vh;
+				background: rgba(255,255,255,0.8);
+				overflow: hidden;
+				margin: 0;
+				padding: 0.5rem;
+				box-sizing: border-box;
+			}
+			#close_btn {
+				border-radius: 0.5rem;
+				padding: 0.8rem;
+				color: white;
+				font-size: 1rem;
+				position: absolute;
+				top: 1rem;
+				left: 1rem;
+				background: rgba(0,0,200,0.7);
+				z-index: 1000000;
+				box-shadow: 0.1rem 0.1rem 0.2rem -0.1rem black;
+			}
+			#viewer img {
+				display: block;
+				position: relative;
+				max-width: 100%;
+				max-height: 100%;
+				box-sizing: border-box;
+				margin: auto;
+			}
+		</style>
+	{% endblock %}
+    {% block content %}
+        <div class="content">
+	       <div id="booze">
+			   {% raw %}
+			   <div id="viewer" v-if="image_index > -1">
+				   <div id="close_btn" @click="image_index=-1">X</div>
+				   <img :src="images[image_index].scaled">
+			   </div>
+			  		<ul>
+						<li v-for="(image, index) in images" v-if="index < num_pictures ">
+							<img :src="image.thumb" @click="image_index=index">
+						</li>
+					</ul>	
+			   {% endraw %}
+	       </div>
+        </div>
+		<script>
+			var booze = new Vue({
+				el: '#booze',
+				data: {
+					images: [],
+					num_pictures: 3,
+					image_index: -1,
+				},
+				methods: {
+					get_pictures: function () {
+						fetch("{{ url_for('get_pictures')}}")
+							.then(res => res.json())
+							.then(res => this.images=res);
+					},
+					reverse: function () {
+						this.images = this.images.reverse();
+					}
+				},
+				mounted: function () {
+					this.get_pictures();
+				}
+			})
+		</script>
+    {% endblock %}
+

@@ -32,13 +32,16 @@ def format_image_name(name):
 def index():
     return render_template("index.html")
 
+@booze.route("/gallery")
+def gallery():
+    return render_template('gallery.html')
 
 @booze.route("/api/v1/pictures", methods=["GET"])
 def get_pictures():
     imagedir = current_app.config['IMAGE_FOLDER']
     data = [ 
         format_image_name(name)
-        for name in listdir(imagedir)
+        for name in sorted(listdir(imagedir))
     ]
     return jsonify(data)
 
