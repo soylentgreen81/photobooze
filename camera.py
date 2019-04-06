@@ -1,3 +1,4 @@
+from datetime import datetime
 import gphoto2 as gp
 from os.path import join
 from filelock import Timeout, FileLock
@@ -14,8 +15,9 @@ def take_picture(imagedir):
         gp.check_result(gp.gp_widget_set_value(capture_target, value))
         gp.check_result(gp.gp_camera_set_config(camera, config))
         file_path = gp.check_result(gp.gp_camera_capture(camera, gp.GP_CAPTURE_IMAGE))
-        target = join(imagedir, file_path.name)
+        file_name = datetime.now().strftime('%y%m%d-%H%M%S-%f') + file_path.name
+        target = join(imagedir, file_name)
         camera_file = gp.check_result(gp.gp_camera_file_get(camera, file_path.folder, file_path.name, gp.GP_FILE_TYPE_NORMAL))
         gp.check_result(gp.gp_file_save(camera_file, target))
         gp.check_result(gp.gp_camera_exit(camera))
-        return file_path.name
+        return file_name
