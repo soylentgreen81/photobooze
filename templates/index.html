@@ -1,38 +1,6 @@
 {% extends "base.html" %}
 	{% block head %}
 		<link rel="stylesheet" href="{{ url_for('static', filename='obnoxious.css')}}">
-		<style>
-			#trigger {
-				border-radius: 0.5rem;
-				border: none;
-				position: fixed;
-				width: calc(100vw - 2rem);
-				left: 1rem;
-				bottom: 1rem;
-				padding: 0.8rem;
-				color: white;
-				font-size: 1rem;
-				background: rgba(0,0,200,0.7);
-				z-index: 1000000;
-				box-shadow: 0.1rem 0.1rem 0.2rem -0.1rem black;
-			}
-			#image {
-				width: 100%;
-				height: calc(100vh - 7rem);
-				top: 0;
-				display: block;
-				background-size: contain!important;
-				padding: 1rem;
-				box-sizing: border-box;
-			}
-			#counter {
-				position: fixed;
-				font-size: 4rem;
-				bottom: 10rem;
-				width: 100%;
-				text-align: center;
-			}
-		</style>
 	{% endblock %}
     {% block content %}
         <div class="content">
@@ -41,5 +9,5 @@
 			</div>
 		   <input type="button" value="Click!" id="trigger"/>
 		</div>
-			<script src="{{ url_for('static', filename='booze.js') }}"></script>
-	    {% endblock %}
+		<script src="{{ url_for('static', filename='booze.js') }}"></script>
+	{% endblock %}

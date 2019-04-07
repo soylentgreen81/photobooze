@@ -26,11 +26,7 @@ function countdownTimer(){
 			snap();
 		}
 	}, 1000);
-
-
-
 }
-
 
 function snap(){
     console.log("Taking a picture...");
@@ -38,21 +34,21 @@ function snap(){
     fetch('/api/v1/pictures',
        {method:"POST"}
     )
-      .then(response=> response.json() )
-      .then(json => {
-		  image.style.background ="url(" + json.scaled + ") center no-repeat";
-			btn.addEventListener("click",countdownTimer);
-			btn.value = 'Click!';
-			setTimeout(function(){ 
-				image.classList.add('animated'); 
-				image.classList.add('intensifies'); 
-				setTimeout(function(){ 
-					image.style.background = '';
-					image.classList.remove('animated'); 
-					image.classList.remove('intensifies'); 
-				},2000)
-			},5000)
-	  })
-      .catch(error => image.src='/static/broken.png');
+   .then(response => response.json() )
+   .then(json => {
+        image.style.background ="url(" + json.scaled + ") center no-repeat";
+        btn.addEventListener("click",countdownTimer);
+        btn.value = 'Click!';
+        setTimeout(function(){
+            image.classList.add('animated');
+            image.classList.add('intensifies');
+            setTimeout(function(){
+                image.style.background = '';
+                image.classList.remove('animated');
+                image.classList.remove('intensifies');
+            },2000)
+        },5000)
+  })
+  .catch(error => image.style.background="url(/static/broken.png) center no-repeat");
 
 }

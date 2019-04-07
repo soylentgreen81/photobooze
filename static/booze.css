@@ -6,3 +6,98 @@ img {
     max-width: 100%;
     max-height: 100%;
 }
+#gallery ul {
+    padding: 0;
+}
+#gallery li {
+    float: left;
+    margin: 0.5rem;
+    list-style-type: none;
+}
+#gallery li img {
+    width: 100%;
+}
+body {
+    margin: 0;
+}
+#viewer {
+    position: fixed;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(255,255,255,0.8);
+    overflow: hidden;
+    margin: 0;
+    padding: 0.5rem;
+    box-sizing: border-box;
+}
+#close_btn {
+    border-radius: 0.5rem;
+    padding: 0.8rem;
+    color: white;
+    font-size: 1rem;
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    background: rgba(0,0,200,0.7);
+    z-index: 1000000;
+    box-shadow: 0.1rem 0.1rem 0.2rem -0.1rem black;
+}
+#viewer img {
+    display: block;
+    position: relative;
+    max-width: 100%;
+    max-height: 100%;
+    box-sizing: border-box;
+    margin: auto;
+}
+@media (max-width: 30rem) {
+    #gallery li {
+        width: calc(50% - 1rem);
+    }
+}
+@media (min-width: 30rem) and (max-width: 50rem){
+    #gallery li {
+        width: calc(33% - 1rem);
+    }
+}
+@media (min-width: 50rem) and (max-width: 75rem) {
+    #gallery li {
+        width: calc(25% - 1rem);
+    }
+}
+@media (min-width: 75rem) {
+    #gallery li {
+        width: calc(12.5% - 1rem);
+    }
+}
+#trigger {
+    border-radius: 0.5rem;
+    border: none;
+    position: fixed;
+    width: calc(100vw - 2rem);
+    left: 1rem;
+    bottom: 1rem;
+    padding: 0.8rem;
+    color: white;
+    font-size: 1rem;
+    background: rgba(0,0,200,0.7);
+    z-index: 1000000;
+    box-shadow: 0.1rem 0.1rem 0.2rem -0.1rem black;
+}
+#image {
+    width: 100%;
+    height: calc(100vh - 7rem);
+    top: 0;
+    display: block;
+    background-size: contain!important;
+    padding: 1rem;
+    box-sizing: border-box;
+}
+#counter {
+    position: fixed;
+    font-size: 4rem;
+    bottom: 10rem;
+    width: 100%;
+    text-align: center;
+}
