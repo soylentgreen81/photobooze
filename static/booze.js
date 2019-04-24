@@ -2,53 +2,50 @@
 const btn = document.getElementById("trigger");
 const image = document.getElementById("image");
 const counter = document.getElementById("counter");
-btn.addEventListener("click",countdownTimer);
+const socket = io();
+btn.addEventListener("click",snap);
 
-function countdownTimer(){
-	// weg mit listener
-	btn.removeEventListener("click",countdownTimer);
-	let timeLeft = 5;
-	btn.value = 'Noch ' + timeLeft + ' Sekunden';
+
+function socket_test() {
+    socket.emit('random', {});
+}
+function snap() {
+    socket.emit('trigger', {});
+}
+socket.on('working', (data) =>{
+    console.log(data);
+    btn.removeEventListener("click",snap);
 	image.style.background = '';
 	counter.classList.add('animated'); 
 	counter.classList.add('intensifies'); 
-	counter.innerHTML = timeLeft;
-	const downloadTimer = setInterval(function(){
-		timeLeft--;
-	    console.log(`Noch ${timeLeft} Sekunden`);
-	    btn.value = `Noch ${timeLeft} Sekunden`;
-		counter.innerHTML = timeLeft;
-		if (timeLeft <= 0){
-			clearInterval(downloadTimer);
-			counter.innerHTML = '';
-			counter.classList.remove('animated'); 
-			counter.classList.remove('intensifies'); 
-			snap();
-		}
-	}, 1000);
-}
-
-function snap(){
-    console.log("Taking a picture...");
-    image.style.background ="url(/static/spinner.svg) center no-repeat";
-    fetch('/api/v1/pictures',
-       {method:"POST"}
-    )
-   .then(response => response.json() )
-   .then(json => {
-        image.style.background ="url(" + json.scaled + ") center no-repeat";
-        btn.addEventListener("click",countdownTimer);
-        btn.value = 'Click!';
+});
+socket.on('timer', (data) => {
+    console.log(data);
+	btn.value = 'Noch ' + data.time + ' Sekunden';
+	counter.innerHTML = data.time;
+});
+socket.on('result', (data) => {
+    console.log(data);
+    image.style.background ="url(" + data.scaled + ") center no-repeat";
+    btn.addEventListener("click", snap);
+    btn.value = 'Click!';
+    setTimeout(function(){
+        image.classList.add('animated');
+        image.classList.add('intensifies');
         setTimeout(function(){
-            image.classList.add('animated');
-            image.classList.add('intensifies');
-            setTimeout(function(){
-                image.style.background = '';
-                image.classList.remove('animated');
-                image.classList.remove('intensifies');
-            },2000)
-        },5000)
-  })
-  .catch(error => image.style.background="url(/static/broken.png) center no-repeat");
-
-}
+            image.style.background = '';
+            image.classList.remove('animated');
+            image.classList.remove('intensifies');
+        },2000)
+    },5000)
+});
+socket.on('processing', (data) => {
+    console.log(data);
+    counter.innerHTML = '';
+    counter.classList.remove('animated'); 
+    counter.classList.remove('intensifies'); 
+    image.style.background ="url(/static/spinner.svg) center no-repeat";
+});
+socket.on('random', (data) => {
+    console.log(data);
+});

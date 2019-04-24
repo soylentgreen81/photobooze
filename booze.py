@@ -11,14 +11,47 @@ from flask import (
     current_app,
     url_for
     )
-
+from flask_socketio import SocketIO, send
 from os import listdir
 from os.path import join
 from imageutil import create_thumbs
-
+from filelock import Timeout, FileLock
+import threading
+import asyncio
+import eventlet
 
 booze = Flask(__name__, static_folder="static", template_folder="templates")
 booze.config.from_object('settings')
+
+socketio = SocketIO(booze, async_mode='eventlet')
+
+countdown_lock = FileLock("countdown.lock", timeout=0) 
+eventlet.monkey_patch()
+
+def socket_test():
+    for x in range(0, 5):
+        socketio.emit('random', {"r":x})
+
+def photo_trigger():
+    with countdown_lock.acquire(timeout=1):
+        socketio.emit('working', {})
+        for t in range(3,-1,-1):
+            print(t)
+            socketio.emit('timer',{"time": t})
+            socketio.sleep(1)
+        socketio.emit('processing',{})
+        #socketio.sleep(0)
+        image_folder = current_app.config['IMAGE_FOLDER']
+        scaled_folder = current_app.config['SCALED_FOLDER']
+        thumb_folder = current_app.config['THUMB_FOLDER']
+        camera_func = current_app.config['CAMERA_FUNCTION']
+        current_app.logger.info('Taking a picture...')
+        image_name = camera_func(image_folder)
+        create_thumbs(image_name, image_folder, scaled_folder, thumb_folder)   
+        result = format_image_name(image_name)
+        socketio.emit('result', result)
+        print(result)
+        return result
 
 def format_image_name(name):
     return {
@@ -60,15 +93,36 @@ def get_picture(size, filename):
 
 @booze.route("/api/v1/pictures", methods=["POST"])
 def post_picture():
-    image_folder = current_app.config['IMAGE_FOLDER']
-    scaled_folder = current_app.config['SCALED_FOLDER']
-    thumb_folder = current_app.config['THUMB_FOLDER']
-    camera_func = current_app.config['CAMERA_FUNCTION']
-    current_app.logger.info('Taking a picture...')
-    image_name = camera_func(image_folder)
-    create_thumbs(image_name, image_folder, scaled_folder, thumb_folder)   
-    return jsonify(format_image_name(image_name))
+    try:
+        result = photo_trigger()
+        return jsonify(result)
+    except Timeout:
+        return abort(409)
+
+@booze.route("/api/v1/trigger", methods=["GET"])
+def send_trigger():
+    try:
+        result = photo_trigger()
+        return "==^..^=="
+    except Timeout:
+        return "==X..X=="
+
+@socketio.on("connect")
+def socket_connect():
+    print('client da')
+
+@socketio.on("random")
+def socket_trigger(trigger):
+    socket_test()
+
+@socketio.on("trigger")
+def socket_trigger(trigger):
+    print("trigger---socket")
+    try:
+        photo_trigger()
+    except Timeout:
+        return abort(409)
 
 
 if __name__ == "__main__":
-    booze.run (  host="0.0.0.0", port = "8000", debug = "True" )
+    socketio.run (booze,  host="0.0.0.0", port = 8000, debug = False )
