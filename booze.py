@@ -3,6 +3,7 @@ from flask import (
     abort,
     Flask,
     jsonify,
+    redirect,
     render_template,
     Response,
     request,
@@ -69,6 +70,36 @@ def post_picture():
     create_thumbs(image_name, image_folder, scaled_folder, thumb_folder)   
     return jsonify(format_image_name(image_name))
 
+############### CAPTIVE PORTAL ##################
+@booze.route("/generate_204")
+def cp_generate_204():
+    # Android
+    return Response(
+            response=None,
+            status=200,
+            headers=None,
+            mimetype="text/html",
+            content_type="text/html",
+            direct_passthrough=False
+            )
+
+@booze.route("/gen_204")
+def cp_gen_204():
+    # Android
+    return redirect (
+            location=url_for("gallery"),
+            code=302,
+            Response=None
+            )
+
+@booze.route("/hotspot-detect.html")
+def cp_hotspot_detect():
+    # Apple
+    return redirect(
+            location="http://login.com",
+            code=302,
+            Response=None
+            )
 
 if __name__ == "__main__":
     booze.run (  host="0.0.0.0", port = "8000", debug = "True" )
