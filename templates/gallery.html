@@ -1,22 +1,20 @@
 {% extends "base.html" %}
 	{% block head %}
-		<style>
-
-		</style>
+        <script src="{{url_for('static', filename='hammer.min.js')}}"></script>
 	{% endblock %}
     {% block content %}
         <div class="content">
 	       <div id="booze">
 			   {% raw %}
-			   <div id="viewer" v-if="imageIndex > -1">
-				   <div id="close_btn" @click="imageIndex=-1">X</div>
-				   <img :src="images[imageIndex].scaled">
+               <div id="viewer" v-bind:class="{hidden : imageIndex == -1}">
+				   <div id="close_btn" @click="closeImage()">X</div>
+                   <img :src="images[imageIndex].scaled" v-if="imageIndex > -1">
 			   </div>
-			  		<ul id="gallery">
-						<li v-for="(image, index) in images" v-if="index < imageLimit ">
-							<img :src="image.thumb" @click="imageIndex=index">
-						</li>
-					</ul>	
+                <ul id="gallery">
+                    <li v-for="(image, index) in images" v-if="index < imageLimit ">
+                        <img :src="image.thumb" @click="openImage(index)">
+                    </li>
+                </ul>	
 			   {% endraw %}
 	       </div>
         </div>

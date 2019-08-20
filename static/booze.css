@@ -51,6 +51,9 @@ body {
     box-sizing: border-box;
     margin: auto;
 }
+.hidden{
+    display: none;
+}
 @media (max-width: 30rem) {
     #gallery li {
         width: calc(50% - 1rem);
