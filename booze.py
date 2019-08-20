@@ -40,18 +40,24 @@ def photo_trigger():
             socketio.emit('timer',{"time": t})
             socketio.sleep(1)
         socketio.emit('processing',{})
-        #socketio.sleep(0)
+        socketio.sleep(0.3)
         image_folder = current_app.config['IMAGE_FOLDER']
         scaled_folder = current_app.config['SCALED_FOLDER']
         thumb_folder = current_app.config['THUMB_FOLDER']
         camera_func = current_app.config['CAMERA_FUNCTION']
         current_app.logger.info('Taking a picture...')
-        image_name = camera_func(image_folder)
-        create_thumbs(image_name, image_folder, scaled_folder, thumb_folder)   
-        result = format_image_name(image_name)
-        socketio.emit('result', result)
-        print(result)
-        return result
+        try:    
+            image_name = camera_func(image_folder)
+            create_thumbs(image_name, image_folder, scaled_folder, thumb_folder)
+            result = format_image_name(image_name)
+            socketio.emit('result', result)
+            socketio.sleep(0)
+            #print(result)
+            return result
+        except:
+            socketio.emit('error','Ein Fehler ist aufgetreten')
+            socketio.sleep(0)
+            raise
 
 def format_image_name(name):
     return {
@@ -125,4 +131,4 @@ def socket_trigger(trigger):
 
 
 if __name__ == "__main__":
-    socketio.run (booze,  host="0.0.0.0", port = 8000, debug = False )
+    socketio.run (booze,  host="0.0.0.0", port = 80, debug = False )

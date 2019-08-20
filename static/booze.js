@@ -39,6 +39,12 @@ socket.on('result', (data) => {
         },2000)
     },5000)
 });
+socket.on('error', (data) => {
+    console.log(data);
+    btn.addEventListener("click", snap);
+    btn.value = data;
+}
+);
 socket.on('processing', (data) => {
     console.log(data);
     counter.innerHTML = '';
