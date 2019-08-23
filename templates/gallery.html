@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 	{% block head %}
         <script src="{{url_for('static', filename='photoswipe.min.js')}}"></script>
+        <script src="{{url_for('static', filename='lazysizes.min.js')}}"></script>
         <script src="{{url_for('static', filename='photoswipe-ui-default.min.js')}}"></script>
         <link rel="stylesheet" href="{{url_for('static', filename='photoswipe.css')}}"> 
         <link rel="stylesheet" href="{{url_for('static', filename='default-skin.css')}}"> 
@@ -12,7 +13,7 @@
            
                 <ul id="gallery">
                     <li v-for="(image, index) in images" v-if="index < imageLimit ">
-                        <img :src="image.thumbnail" @click="openImage(index)">
+                        <img :data-src="image.thumbnail" @click="openImage(index)" width="128" height="128" class="lazyload">
                     </li>
                 </ul>	
 			   {% endraw %}
@@ -46,14 +47,12 @@
     
                     <div class="pswp__counter"></div>
     
-                    <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                    <button class="pswp__button pswp__button--close" title="Schliessen (Esc)"></button>
     
-                    <button class="pswp__button pswp__button--share" title="Share"></button>
+                    <button class="pswp__button pswp__button--share" title="Download"></button>
     
-                    <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
-    
-                    <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
-    
+                    <button class="pswp__button pswp__button--fs" title="Vollbild"></button>
+        
                     <!-- Preloader demo https://codepen.io/dimsemenov/pen/yyBWoR -->
                     <!-- element will get class pswp__preloader--active when preloader is running -->
                     <div class="pswp__preloader">
@@ -69,10 +68,10 @@
                     <div class="pswp__share-tooltip"></div> 
                 </div>
     
-                <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+                <button class="pswp__button pswp__button--arrow--left" title="Naechstes Bild (Pfeil links)">
                 </button>
     
-                <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+                <button class="pswp__button pswp__button--arrow--right" title="Vorheriges Bild (Pfeil rechts)">
                 </button>
     
                 <div class="pswp__caption">

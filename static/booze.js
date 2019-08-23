@@ -26,7 +26,7 @@ socket.on('timer', (data) => {
 });
 socket.on('result', (data) => {
     console.log(data);
-    image.style.background ="url(" + data.scaled + ") center no-repeat";
+    image.style.background ="url(" + data.src + ") center no-repeat";
     btn.addEventListener("click", snap);
     btn.value = 'Click!';
     setTimeout(function(){

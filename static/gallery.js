@@ -33,8 +33,9 @@ var booze = new Vue({
 
             // define options (if needed)
             var options = {
-                // optionName: 'option value'
-                // for example:
+                shareButtons: [
+       			{id:'download', label:'Bild speichern', url:'{{raw_image_url}}', download:true}
+		],
                 index: index // start at first slide
             };
             // Initializes and opens PhotoSwipe
