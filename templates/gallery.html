@@ -1,24 +1,90 @@
 {% extends "base.html" %}
 	{% block head %}
-        <script src="{{url_for('static', filename='hammer.min.js')}}"></script>
+        <script src="{{url_for('static', filename='photoswipe.min.js')}}"></script>
+        <script src="{{url_for('static', filename='photoswipe-ui-default.min.js')}}"></script>
+        <link rel="stylesheet" href="{{url_for('static', filename='photoswipe.css')}}"> 
+        <link rel="stylesheet" href="{{url_for('static', filename='default-skin.css')}}"> 
 	{% endblock %}
     {% block content %}
         <div class="content">
 	       <div id="booze">
 			   {% raw %}
-               <div id="viewer" v-bind:class="{hidden : imageIndex == -1}">
-				   <div id="close_btn" @click="closeImage()">X</div>
-                   <img :src="images[imageIndex].scaled" v-if="imageIndex > -1">
-			   </div>
+           
                 <ul id="gallery">
                     <li v-for="(image, index) in images" v-if="index < imageLimit ">
-                        <img :src="image.thumb" @click="openImage(index)">
+                        <img :src="image.thumbnail" @click="openImage(index)">
                     </li>
                 </ul>	
 			   {% endraw %}
 	       </div>
         </div>
-		<script src="{{ url_for('static', filename='gallery.js') }}"></script>
+        <!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+        <!-- Background of PhotoSwipe. 
+             It's a separate element as animating opacity is faster than rgba(). -->
+        <div class="pswp__bg"></div>
+    
+        <!-- Slides wrapper with overflow:hidden. -->
+        <div class="pswp__scroll-wrap">
+    
+            <!-- Container that holds slides. 
+                PhotoSwipe keeps only 3 of them in the DOM to save memory.
+                Don't modify these 3 pswp__item elements, data is added later on. -->
+            <div class="pswp__container">
+                <div class="pswp__item"></div>
+                <div class="pswp__item"></div>
+                <div class="pswp__item"></div>
+            </div>
+    
+            <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+            <div class="pswp__ui pswp__ui--hidden">
+    
+                <div class="pswp__top-bar">
+    
+                    <!--  Controls are self-explanatory. Order can be changed. -->
+    
+                    <div class="pswp__counter"></div>
+    
+                    <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+    
+                    <button class="pswp__button pswp__button--share" title="Share"></button>
+    
+                    <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+    
+                    <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+    
+                    <!-- Preloader demo https://codepen.io/dimsemenov/pen/yyBWoR -->
+                    <!-- element will get class pswp__preloader--active when preloader is running -->
+                    <div class="pswp__preloader">
+                        <div class="pswp__preloader__icn">
+                          <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                          </div>
+                        </div>
+                    </div>
+                </div>
+    
+                <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                    <div class="pswp__share-tooltip"></div> 
+                </div>
+    
+                <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+                </button>
+    
+                <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+                </button>
+    
+                <div class="pswp__caption">
+                    <div class="pswp__caption__center"></div>
+                </div>
+    
+            </div>
+    
+        </div>
+    
+    </div>
+        <script src="{{ url_for('static', filename='gallery.js') }}"></script>
 
     {% endblock %}
 

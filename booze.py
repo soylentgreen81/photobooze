@@ -63,8 +63,10 @@ def photo_trigger():
 def format_image_name(name):
     return {
             'full': url_for('get_picture',size='full', filename=name),
-            'scaled': url_for('get_picture',size='scaled', filename=name),
-            'thumb': url_for('get_picture', size='thumb', filename=name)
+            'src': url_for('get_picture',size='scaled', filename=name),
+            'thumbnail': url_for('get_picture', size='thumb', filename=name),
+            'w' : 1920,
+            'h' : 1280
     }
 
 

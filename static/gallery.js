@@ -5,7 +5,7 @@ var booze = new Vue({
         imageLimit: 0,
         imageIndex: -1,
         hammertime: null,
-        fetchSize: 48,
+        fetchSize: 1000,
     },
     methods: {
         loadImages: function () {
@@ -14,6 +14,7 @@ var booze = new Vue({
                 .then(res => {
                     this.images=res;
                     this.imageLimit = Math.min(this.images.length, this.fetchSize);
+                    this.reverse();
                 }
                 );
         },
@@ -28,6 +29,17 @@ var booze = new Vue({
         },
         openImage: function(index) {
             this.imageIndex = index;
+            var pswpElement = document.querySelectorAll('.pswp')[0];
+
+            // define options (if needed)
+            var options = {
+                // optionName: 'option value'
+                // for example:
+                index: index // start at first slide
+            };
+            // Initializes and opens PhotoSwipe
+            var gallery = new PhotoSwipe( pswpElement, PhotoSwipeUI_Default, this.images, options);
+            gallery.init();
         },
         closeImage: function() {
             this.imageIndex = -1;
@@ -48,18 +60,6 @@ var booze = new Vue({
     mounted: function () {
         this.loadImages();
         document.addEventListener("scroll", this.infiniteScroll);
-        this.hammertime = new Hammer(document.getElementById('viewer'))
-        this.hammertime.on('swipe', (ev)=>{
-            if (ev.isFinal){
-                switch (ev.direction){
-                    case Hammer.DIRECTION_RIGHT:
-                        this.previousImage();
-                        break;
-                    case Hammer.DIRECTION_LEFT:
-                         this.nextImage();
-                         break;
-                }
-            }
-        });
+       
     }
 });
