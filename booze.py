@@ -109,6 +109,7 @@ def post_picture():
 @booze.route("/api/v1/trigger", methods=["GET"])
 def send_trigger():
     try:
+        print("Rest API call")
         result = photo_trigger()
         return "==^..^=="
     except Timeout:
@@ -156,7 +157,7 @@ def cp_gen_204():
 def cp_hotspot_detect():
     # Apple
     return redirect(
-            location="http://login.com",
+            location=url_for("gallery"),
             code=302,
             Response=None
             )
