@@ -52,20 +52,27 @@ def pulse_thread(led, pause, times):
             time.sleep_ms(pause)
     led.duty(0)
 def take_photo():
-    if not wlan.isconnected():
-        _connect_wifi()
-    s=socket.socket()
-    ai = socket.getaddrinfo("photobooze.org", 80)
-    addr = ai[0][-1]
-    print("connection to photobooze...")
-    s.connect(addr)
-    print("sending request...")
-    s.send(b"GET /api/v1/trigger HTTP/1.0\r\nHOST: photobooze.org\r\n\r\n")
-    print(s.recv(4096))
-    s.close()
-    del s
-
-
+    try:
+        led_red.off()
+        led_blue.on()
+        if not wlan.isconnected():
+            _connect_wifi()
+        s=socket.socket()
+        ai = socket.getaddrinfo("photobooze.org", 80)
+        addr = ai[0][-1]
+        print("connection to photobooze...")
+        s.connect(addr)
+        print("sending request...")
+        s.send(b"GET /api/v1/trigger HTTP/1.0\r\nHOST: photobooze.org\r\n\r\n")
+        print(s.recv(4096))
+        s.close()
+        del s
+    except Exception as e:
+        print("Error requesting picture:" + str(e))
+        led_red.on()
+    finally:
+        led_blue.off()
+    
 def rgb_off():
     led_red.off()
     led_green.off()
