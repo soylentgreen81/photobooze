@@ -78,6 +78,11 @@ def index():
 def gallery():
     return render_template('gallery.html')
 
+@booze.route("/slideshow")
+def slideshow():
+    return render_template('slideshow.html')
+
+
 @booze.route("/api/v1/pictures", methods=["GET"])
 def get_pictures():
     imagedir = current_app.config['IMAGE_FOLDER']
