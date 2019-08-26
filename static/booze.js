@@ -4,7 +4,7 @@ const image = document.getElementById("image");
 const counter = document.getElementById("counter");
 const socket = io();
 const colors = [
-    "#8f807",
+    "#8f807c",
     "#a153a0",
     "#00aaab",
     "#0070bb",

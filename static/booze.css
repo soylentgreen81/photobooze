@@ -45,8 +45,9 @@ body {
     padding: 0.8rem;
     color: white;
     font-size: 1rem;
-    background: rgba(0,0,200,0.7);
-    z-index: 1000000;
+    background-image: linear-gradient(0deg, #0070bb 12.50%, #0cb04a 12.50%, #0cb04a 25%, #ffd100 25%, #ffd100 37.50%, #ec1b24 37.50%, #ec1b24 50%, #0070bb 50%, #0070bb 62.50%, #0cb04a 62.50%, #0cb04a 75%, #ffd100 75%, #ffd100 87.50%, #ec1b24 87.50%, #ec1b24 100%);
+    background-size: 5.2rem 5.2rem;
+     z-index: 1000000;
     box-shadow: 0.1rem 0.1rem 0.2rem -0.1rem black;
 }
 #image {
@@ -58,7 +59,7 @@ body {
     padding: 1rem;
     box-sizing: border-box;
     background-image: url("/static/polaroid.svg");
-    background-position: center;
+    background-position: center center;
     background-repeat: no-repeat;
 }
 #counter {
