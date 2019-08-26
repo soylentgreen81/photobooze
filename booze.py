@@ -78,9 +78,9 @@ def index():
 def gallery():
     return render_template('gallery.html')
 
-@booze.route("/kiosk")
-def kiosk():
-    return render_template("kiosk.html")
+@booze.route("/booze")
+def booze_page():
+    return render_template("booze.html")
 
 @booze.route("/slideshow")
 def slideshow():

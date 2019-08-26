@@ -43,8 +43,8 @@ socket.on('timer', (data) => {
     console.log(data);
     image.style.backgroundImage = "none";
     btn.value = 'Noch ' + data.time + ' Sekunden';
-    counter.innerHTML = data.time;
     counter.style.color = colors[currentColor];
+    counter.innerHTML = data.time;
     currentColor += 1;
     if (colors.length == currentColor)
         currentColor = 0;
