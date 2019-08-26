@@ -1,0 +1,32 @@
+#gallery {
+    display: grid;
+    grid-gap: 10px;
+    align-items: stretch;
+    justify-items: center;
+}
+@media (max-width: 30rem) {
+    #gallery {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+@media (min-width: 30rem) and (max-width: 50rem){
+    #gallery  {
+        grid-template-columns: 1fr 1fr 1fr;
+    }
+}
+@media (min-width: 50rem) and (max-width: 75rem) {
+    #gallery  {
+        grid-template-columns: 1fr 1fr 1fr 1fr;
+    }
+}
+@media (min-width: 75rem) {
+    #gallery  {
+        grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+    }
+}
+#gallery img {
+    max-width: 100%;
+}
+body{
+    background: #222;
+}

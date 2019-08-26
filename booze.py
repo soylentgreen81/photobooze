@@ -72,11 +72,15 @@ def format_image_name(name):
 
 @booze.route("/", methods = ["GET"])
 def index():
-    return render_template("index.html")
+    return render_template("gallery.html")
 
 @booze.route("/gallery")
 def gallery():
     return render_template('gallery.html')
+
+@booze.route("/kiosk")
+def kiosk():
+    return render_template("kiosk.html")
 
 @booze.route("/slideshow")
 def slideshow():

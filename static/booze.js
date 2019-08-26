@@ -4,13 +4,24 @@ const image = document.getElementById("image");
 const counter = document.getElementById("counter");
 const socket = io();
 btn.addEventListener("click",snap);
-
+function enterFullscreen(element) {
+    if(element.requestFullscreen) {
+      element.requestFullscreen();
+    } else if(element.mozRequestFullScreen) {
+      element.mozRequestFullScreen();
+    } else if(element.msRequestFullscreen) {
+      element.msRequestFullscreen();
+    } else if(element.webkitRequestFullscreen) {
+      element.webkitRequestFullscreen();
+    }
+}
 
 function socket_test() {
     socket.emit('random', {});
 }
 function snap() {
     socket.emit('trigger', {});
+    enterFullscreen(document.documentElement);
 }
 socket.on('working', (data) =>{
     console.log(data);

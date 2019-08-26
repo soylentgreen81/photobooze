@@ -10,5 +10,5 @@ def create_thumbs(image_name, image_folder, scaled_folder, thumb_folder):
             scaled = resizeimage.resize_width(image, 1920)
             scaled.save(join(scaled_folder, image_name), image.format, resample=Image.NEAREST,  optimize=True, progressive=True)
             current_app.logger.info('creating thumb image')
-            cover = resizeimage.resize_cover(scaled, [128, 128])
+            cover = resizeimage.resize_cover(scaled, [256, 256])
             cover.save(join(thumb_folder, image_name), scaled.format)
