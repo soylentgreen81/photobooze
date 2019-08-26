@@ -3,6 +3,18 @@ const btn = document.getElementById("trigger");
 const image = document.getElementById("image");
 const counter = document.getElementById("counter");
 const socket = io();
+const colors = [
+    "#8f807",
+    "#a153a0",
+    "#00aaab",
+    "#0070bb",
+    "#ffd100",
+    "#f6931c",
+    "#ec1b24",
+    "#8bc63f",
+    "#0cb04a",
+];
+let currentColor = 0;
 btn.addEventListener("click",snap);
 function enterFullscreen(element) {
     if(element.requestFullscreen) {
@@ -16,9 +28,6 @@ function enterFullscreen(element) {
     }
 }
 
-function socket_test() {
-    socket.emit('random', {});
-}
 function snap() {
     socket.emit('trigger', {});
     enterFullscreen(document.documentElement);
@@ -32,8 +41,13 @@ socket.on('working', (data) =>{
 });
 socket.on('timer', (data) => {
     console.log(data);
-	btn.value = 'Noch ' + data.time + ' Sekunden';
-	counter.innerHTML = data.time;
+    image.style.backgroundImage = "none";
+    btn.value = 'Noch ' + data.time + ' Sekunden';
+    counter.innerHTML = data.time;
+    counter.style.color = colors[currentColor];
+    currentColor += 1;
+    if (colors.length == currentColor)
+        currentColor = 0;
 });
 socket.on('result', (data) => {
     console.log(data);
@@ -45,6 +59,7 @@ socket.on('result', (data) => {
         image.classList.add('intensifies');
         setTimeout(function(){
             image.style.background = '';
+            image.style["background-image"] = "url('/static/polaroid.svg')";
             image.classList.remove('animated');
             image.classList.remove('intensifies');
         },2000)
