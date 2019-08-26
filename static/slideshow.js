@@ -2,29 +2,23 @@ var slides = new Vue({
     el: '.slideshow',
     data: {
         images: [],
-        slideshow: null
+        slideshow: null,
+        timer: null
     },
     methods: {
         loadImages: function () {
             fetch("/api/v1/pictures")
                 .then(res => res.json())
                 .then(res => {
-                    this.images=this.shuffle(res);
-                    
+                    this.images=this.shuffle(res);       
                 }
             );
         },
         shuffle: function shuffle(array) {
-            let currentIndex = array.length, temporaryValue, randomIndex;
-            
-            // While there remain elements to shuffle...
+            let currentIndex = array.length, temporaryValue, randomIndex;      
             while (0 !== currentIndex) {
-            
-                // Pick a remaining element...
                 randomIndex = Math.floor(Math.random() * currentIndex);
                 currentIndex -= 1;
-            
-                // And swap it with the current element.
                 temporaryValue = array[currentIndex];
                 array[currentIndex] = array[randomIndex];
                 array[randomIndex] = temporaryValue;
@@ -34,7 +28,11 @@ var slides = new Vue({
        
     },
     mounted: function () {
+        this.timer = setInterval(this.loadImages, 1000*60*5); 
         this.loadImages();
+    },
+    beforeDestroy: function(){
+        clearInterval(this.timer);
     },
     updated: function(){
         console.log("update!");

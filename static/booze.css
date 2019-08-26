@@ -50,8 +50,8 @@ body {
 }
 #image {
     width: 100%;
-    height: calc(100vh - 7rem);
-    top: 0;
+    height: calc(100vh - 5rem);
+    top: 1rem;
     display: block;
     background-size: contain!important;
     padding: 1rem;
