@@ -11,7 +11,7 @@
     {% block content %}
         <div class="navbar">
             <a href="#">
-                <img src="/static/polaroid.svg" height="40" width="177">
+                <img src="/static/polaroid.svg" height="40" width="177" alt="polaroid">
             </a>
         </div>
         <div class="content">
@@ -19,7 +19,7 @@
 			   {% raw %}
                 <div id="gallery">
                     <figure v-for="(image, index) in images" class="polaroid">
-                        <img :data-src="image.thumbnail" src="/static/camera_placeholder.png" @click="openImage(index)" class="lazyload" width="256" height="256">
+                        <img :data-src="image.thumbnail" src="/static/camera_placeholder.png" @click="openImage(index)" class="lazyload" width="256" height="256" :alt="image.formattedDate">
                         <figcaption>{{image.formattedDate}}</figcaption>
                     </figure>
                 </div>	
