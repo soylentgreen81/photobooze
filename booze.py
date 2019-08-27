@@ -20,6 +20,9 @@ from filelock import Timeout, FileLock
 import threading
 import asyncio
 import eventlet
+import datetime
+from datetime import timezone
+#from datetime import tzinfo
 
 booze = Flask(__name__, static_folder="static", template_folder="templates")
 booze.config.from_object('settings')
@@ -66,9 +69,12 @@ def format_image_name(name):
             'src': url_for('get_picture',size='scaled', filename=name),
             'thumbnail': url_for('get_picture', size='thumb', filename=name),
             'w' : 1920,
-            'h' : 1280
+            'h' : 1280,
+	    'date' : get_image_time(name)
     }
-
+def get_image_time(str_time):
+    image_date = datetime.datetime.strptime(str_time[0:13],'%y%m%d-%H%M%S')
+    return image_date.isoformat() + 'Z'
 
 @booze.route("/", methods = ["GET"])
 def index():

@@ -11,6 +11,10 @@ var booze = new Vue({
             fetch("/api/v1/pictures")
                 .then(res => res.json())
                 .then(res => {
+                    res.forEach(function(e){
+                        const theDate = new Date(e.date);
+                        e.formattedDate = theDate.toLocaleTimeString('de-DE',  {hour: '2-digit', minute:'2-digit'});
+                    });
                     this.images=res;
                     this.reverse();
                 }

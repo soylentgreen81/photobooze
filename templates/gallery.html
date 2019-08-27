@@ -10,13 +10,18 @@
 	{% endblock %}
     {% block content %}
         <div class="navbar">
-            <a href="#">Photobooze</a>
+            <a href="#">
+                <img src="/static/polaroid.svg" height="40" width="177">
+            </a>
         </div>
         <div class="content">
 	       <div id="booze">
 			   {% raw %}
                 <div id="gallery">
-                    <img :data-src="image.thumbnail" @click="openImage(index)" class="lazyload" v-for="(image, index) in images">
+                    <figure v-for="(image, index) in images" class="polaroid">
+                        <img :data-src="image.thumbnail" src="/static/camera_placeholder.png" @click="openImage(index)" class="lazyload" width="256" height="256">
+                        <figcaption>{{image.formattedDate}}</figcaption>
+                    </figure>
                 </div>	
 			   {% endraw %}
 	       </div>
